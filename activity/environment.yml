@@ -7,20 +7,6 @@
 #      conda env create -f environment.yml
 #      conda activate nwcst
 #      python verificar_entorno.py
-#
-#  Este archivo es la MISMA receta que se uso en los cursos anteriores
-#  (Bahamas, Jamaica, Barbados, Washington DC), escrita en un solo
-#  archivo en vez de comando por comando. Los paquetes, las versiones
-#  y los canales son los de alla: canal `defaults` de Anaconda para
-#  todo lo que se instala con conda, y pip solo para los tres paquetes
-#  que no estan en conda. No se agrego conda-forge.
-#
-#  La version comando por comando esta en instalacion_manual.txt, en
-#  esta misma carpeta. Sirve cuando `conda env create` falla y hay que
-#  averiguar cual es el paquete que da problema.
-#
-#  Este entorno cubre las actividades 4 a 8 (datos, seleccion, modelos,
-#  nowcast). Las luces nocturnas (act3) necesitan el entorno aparte
 #  "geo": ver environment-geo.yml.
 ####################################################################
 name: nwcst

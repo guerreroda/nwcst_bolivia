@@ -6,18 +6,6 @@
 #      conda env create -f environment-geo.yml
 #      conda activate geo
 #      python verificar_entorno.py --geo
-#
-#  Igual que environment.yml, esta es la receta de los cursos anteriores
-#  escrita en un archivo: canal `defaults` para todo, salvo `contextily`,
-#  que alla tambien se instalaba desde conda-forge porque no esta en
-#  defaults. La version comando por comando esta en instalacion_manual.txt.
-#
-#  Va aparte del entorno "nwcst" a proposito: GDAL, PROJ y rasterio
-#  arrastran librerias de C que entran en conflicto con pytorch y
-#  pmdarima en un mismo entorno. Separarlos evita esa pelea.
-#
-#  Este entorno es OPCIONAL para la mayoria de los participantes. Solo
-#  lo necesita quien vaya a descargar y procesar las luces nocturnas.
 ####################################################################
 name: geo
 
