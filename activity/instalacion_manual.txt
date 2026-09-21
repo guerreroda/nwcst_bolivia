@@ -1,0 +1,63 @@
+====================================================================
+ INSTALACION MANUAL, PASO A PASO
+ Herramientas para el Nowcasting del Crecimiento del PIB
+ Banco Central de Bolivia / BID - septiembre-octubre 2026
+====================================================================
+
+PARA QUE SIRVE ESTE ARCHIVO
+---------------------------
+La forma normal de instalar es con un solo comando:
+
+    conda env create -f environment.yml
+
+Este archivo es el plan B. Contiene exactamente los mismos paquetes,
+de los mismos canales, pero instalados en varios comandos en vez de
+uno.
+
+Usarlo cuando:
+
+  - `conda env create` se queda pegado en "Solving environment"
+  - `conda env create` termina con un error y no queda claro por que
+  - hay que averiguar CUAL es el paquete que da problema: al
+    instalarlos por grupos, el que falla se ve de inmediato
+
+====================================================================
+ ENTORNO 1 de 2:  nwcst
+====================================================================
+
+conda create -n nwcst python=3.11 pip numpy=1.26.4 "pandas<3" matplotlib seaborn scikit-learn tqdm python-dateutil geopandas jupyterlab ipykernel joblib statsmodels openpyxl -y
+
+conda activate nwcst
+conda install numpy=1.26.4 "pandas<3" scipy requests beautifulsoup4 lxml html5lib xlrd shap -y
+
+conda clean --packages --tarballs
+
+conda install "pytorch=*=cpu_mkl*" numpy=1.26.4 "pandas<3" -y
+conda install pip pmdarima numpy=1.26.4 "pandas<3" -y
+pip install nowcast_lstm
+pip install eurostat
+pip install trendspy
+
+
+Alternativamente: conda install pytorch torchvision torchaudio cpuonly -c pytorch
+
+
+====================================================================
+ ENTORNO 2 de 2:  geo
+====================================================================
+
+conda create -n geo python=3.11 pip numpy "pandas<3" matplotlib seaborn tqdm python-dateutil geopandas jupyterlab ipykernel gdal rasterio folium mapclassify fiona shapely pyproj colorcet h5py libgdal openpyxl requests -y
+
+conda activate geo
+conda install libgdal-hdf5 "pandas<3" -y
+
+conda install -c conda-forge contextily "pandas<3" -y
+pip install blackmarblepy
+
+CUENTA Y TOKEN DE NASA
+----------------------
+1. Registrarse en https://ladsweb.modaps.eosdis.nasa.gov/
+2. Perfil -> Eulas -> aceptar "Meris EULA" y "Sentinel-3 EULA"
+3. Perfil -> Applications -> Authorized Apps: buscar "LAADS Web".
+   Puede hacer falta entrar a "Approve More Applications" y buscarla.
+4. My Account -> Generate Token. Copiar el token.

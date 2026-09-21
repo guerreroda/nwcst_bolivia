@@ -1,0 +1,83 @@
+####################################################################
+#  environment-geo.yml  —  entorno "geo"
+#  Solo para la actividad 3: luces nocturnas (VIIRS / BlackMarble).
+#
+#  Crear (desde Anaconda Prompt, en la carpeta code/):
+#      conda env create -f environment-geo.yml
+#      conda activate geo
+#      python verificar_entorno.py --geo
+#
+#  Igual que environment.yml, esta es la receta de los cursos anteriores
+#  escrita en un archivo: canal `defaults` para todo, salvo `contextily`,
+#  que alla tambien se instalaba desde conda-forge porque no esta en
+#  defaults. La version comando por comando esta en instalacion_manual.txt.
+#
+#  Va aparte del entorno "nwcst" a proposito: GDAL, PROJ y rasterio
+#  arrastran librerias de C que entran en conflicto con pytorch y
+#  pmdarima en un mismo entorno. Separarlos evita esa pelea.
+#
+#  Este entorno es OPCIONAL para la mayoria de los participantes. Solo
+#  lo necesita quien vaya a descargar y procesar las luces nocturnas.
+####################################################################
+name: geo
+
+channels:
+  - defaults
+  - conda-forge       # unicamente para contextily, igual que en los cursos
+                      # anteriores; todo lo demas sale de defaults
+
+dependencies:
+  # --- la receta original de los cursos anteriores ----------------
+  - python=3.11
+  - pip
+  - numpy
+  - pandas<3          # defaults ya ofrece pandas 3.0; los cuadernos estan
+                      # escritos contra pandas 2.x (igual que en nwcst)
+  - matplotlib
+  - seaborn
+  - tqdm
+  - python-dateutil
+  - geopandas
+  - jupyterlab
+  - ipykernel
+  - gdal              # provee el paquete osgeo
+  - libgdal
+  - rasterio
+  - folium
+  - mapclassify
+  - fiona
+  - shapely
+  - pyproj
+  - colorcet
+  - h5py              # los tiles VIIRS vienen en HDF5
+  - openpyxl
+  - requests
+
+  # IMPRESCINDIBLE, y no estaba en la receta original: desde gdal 3.11 el
+  # driver de HDF5 ya no viene en libgdal-core, va en este paquete aparte.
+  # Sin el, gdal.Open() devuelve None en cada tile .h5 SIN lanzar ningun
+  # error, y act3_ntl termina "bien" pero vacio.
+  - libgdal-hdf5
+
+  - conda-forge::contextily     # mapas base
+
+  - pip:
+      - blackmarblepy
+
+####################################################################
+#  Notas
+#
+#  1. Bolivia es grande y mediterranea: su geometria cubre CUATRO tiles
+#     VIIRS (h11v09, h11v10, h12v10, h11v11) frente a uno solo en la
+#     mayoria de los paises del Caribe. La descarga pesa cuatro veces
+#     mas; conviene dejarla corriendo fuera del horario de clase.
+#
+#  2. Hace falta un token de NASA LAADS (gratuito) para descargar:
+#     ladsweb.modaps.eosdis.nasa.gov -> My Account -> Generate Token.
+#     El token vence a los 60 dias. En act0_env_check se pega dentro del
+#     cuaderno; en el resto del curso vive en el literal NASA_TOKEN de
+#     code/config.py.
+#
+#  3. Verificar los tiles una sola vez antes de la primera descarga:
+#         conda run -n geo python -c "import config; config.refresh_registry()"
+####################################################################

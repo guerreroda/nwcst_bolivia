@@ -1,0 +1,99 @@
+####################################################################
+#  environment.yml  —  entorno "nwcst"
+#  Curso: Herramientas para el Nowcasting del Crecimiento del PIB
+#  Banco Central de Bolivia / BID, septiembre-octubre 2026
+#
+#  Crear (desde Anaconda Prompt, en la carpeta code/):
+#      conda env create -f environment.yml
+#      conda activate nwcst
+#      python verificar_entorno.py
+#
+#  Este archivo es la MISMA receta que se uso en los cursos anteriores
+#  (Bahamas, Jamaica, Barbados, Washington DC), escrita en un solo
+#  archivo en vez de comando por comando. Los paquetes, las versiones
+#  y los canales son los de alla: canal `defaults` de Anaconda para
+#  todo lo que se instala con conda, y pip solo para los tres paquetes
+#  que no estan en conda. No se agrego conda-forge.
+#
+#  La version comando por comando esta en instalacion_manual.txt, en
+#  esta misma carpeta. Sirve cuando `conda env create` falla y hay que
+#  averiguar cual es el paquete que da problema.
+#
+#  Este entorno cubre las actividades 4 a 8 (datos, seleccion, modelos,
+#  nowcast). Las luces nocturnas (act3) necesitan el entorno aparte
+#  "geo": ver environment-geo.yml.
+####################################################################
+name: nwcst
+
+channels:
+  - defaults
+
+dependencies:
+  # --- la receta original de los cursos anteriores ----------------
+  - python=3.11
+  - pip
+  - numpy=1.26.4      # version fijada en los cursos anteriores; pmdarima
+                      # y nowcast_lstm se compilan contra la ABI de numpy 1.x
+  - pandas<3          # el canal defaults ya ofrece pandas 3.0, que cambia el
+                      # manejo de copias y de dtypes de texto. Los cuadernos
+                      # del curso estan escritos contra pandas 2.x.
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - tqdm
+  - python-dateutil
+  - geopandas
+  - jupyterlab
+  - ipykernel
+  - joblib
+  - statsmodels
+  - openpyxl
+  - pmdarima
+
+  # pytorch: nowcast_lstm corre en CPU, no hace falta GPU. En los cursos
+  # anteriores esto se hacia con `conda install pytorch torchvision
+  # torchaudio cpuonly -c pytorch`. El canal `defaults` ya trae compilaciones
+  # de CPU (build cpu_mkl_*), asi que se piden por build y no hace falta el
+  # paquete `cpuonly` ni un canal extra. Sin esa marca, conda baja la
+  # compilacion de CUDA: ~2.5 GB que en este curso no se usan.
+  - pytorch=*=cpu_mkl*
+
+  # --- agregados para Bolivia, del mismo canal `defaults` ---------
+  - scipy
+  - requests
+  - beautifulsoup4    # paginas del INE y del BCB que no ofrecen CSV
+  - lxml
+  - html5lib
+  - xlrd              # .xls antiguos: la serie Brent de la EIA llega asi
+  - shap              # importancia de variables en act7
+
+  - pip:
+      # Paquetes que no estan en conda, instalados con pip igual que en
+      # los cursos anteriores.
+      - nowcast_lstm
+      - eurostat      # comercio UE-Bolivia (ds-045409) en 0_data_download
+      # Google Trends. pytrends fue archivado en abril de 2025 y ya no
+      # funciona (da 429 en la primera llamada); trendspy es el sucesor.
+      - trendspy
+
+####################################################################
+#  Notas
+#
+#  1. X-13ARIMA-SEATS es OPCIONAL. El curso corre con SEASONAL_FILTER = 0
+#     (desestacionalizacion clasica, ~2 segundos). Solo si se pone
+#     SEASONAL_FILTER = 1 hace falta el ejecutable del Census Bureau;
+#     las instrucciones estan en el encabezado de config.py.
+#
+#  2. Si `conda env create` tarda mas de 15 minutos resolviendo, usar
+#     mamba, que resuelve el mismo archivo en un minuto:
+#         conda install -n base mamba
+#         mamba env create -f environment.yml
+#
+#  3. Para borrar y empezar de nuevo:
+#         conda deactivate
+#         conda env remove -n nwcst
+#
+#  4. Si el entorno se creo antes del 2026-09-18 le falta `xlrd`, que se
+#     agrego despues:
+#         conda install -n nwcst xlrd
+####################################################################
