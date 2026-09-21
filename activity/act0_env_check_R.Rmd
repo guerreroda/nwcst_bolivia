@@ -68,7 +68,7 @@ if (pkgbuild::has_build_tools(debug = FALSE)) {
   cat("Rtools OK — herramientas de compilación encontradas\n")
 } else {
   cat("Rtools NO encontrado — mfbvar no puede instalarse sin él.\n")
-  cat("Consulta la guía de solución de problemas de mfbvar para las instrucciones de instalación.\n")
+  cat("Instalar: https://cran.r-project.org/bin/windows/Rtools/rtools45/rtools.html\n")
 }
 ```
 
