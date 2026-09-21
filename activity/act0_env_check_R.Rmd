@@ -1,0 +1,294 @@
+---
+title: "S0 — Verificación del entorno"
+subtitle: "Entrenamiento en nowcasting con R — Departamento de Países del Caribe, BID"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: cosmo
+    highlight: github
+    self_contained: true
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+---
+
+# Qué hace este archivo
+
+Este notebook verifica que tu entorno de R está correctamente configurado para el entrenamiento. Comprueba cuatro cosas, en orden:
+
+| Paso | Qué se verifica |
+|---|---|
+| 1. VS Code | La extensión de R está activa y funcionando |
+| 2. Rtools | La cadena de compilación C++ está disponible (requerida por `mfbvar`) |
+| 3. Paquetes | Todas las librerías requeridas cargan sin errores |
+| 4. Pruebas de humo | Cada modelo corre sobre datos sintéticos y devuelve un pronóstico |
+
+**Cómo ejecutarlo:** Corre cada chunk en orden usando el botón **▶ Run Cell** o `Ctrl+Enter`. La salida esperada se muestra debajo de cada chunk. Si algo falla, lee la nota de esa sección antes de continuar.
+
+---
+
+# Antes de empezar — configuración de VS Code
+
+Antes de correr cualquier código, confirma lo siguiente en VS Code:
+
+**1. La extensión de R está instalada**
+Abre el panel de Extensiones (`Ctrl+Shift+X`) y busca **"R"** de REditorSupport. Debe aparecer como instalada y habilitada.
+
+**2. Se seleccionó un mirror de CRAN**
+La primera vez que instales un paquete de R en VS Code, la terminal preguntará:
+
+```
+Would you like to choose a CRAN mirror for this session? (Yes/no/cancel)
+```
+
+Escribe `yes` y presiona Enter. Aparecerá una lista numerada de mirrors. Escribe `0` (para **0-Cloud**, el mirror balanceado globalmente por defecto) y presiona Enter. Esto solo se hace una vez por sesión.
+
+**3. La terminal de R está activa**
+Debes ver el prompt de R (`>`) en el panel de terminal de VS Code. Si ves un prompt de shell común, corre `R` en la terminal para iniciar una sesión de R.
+
+---
+
+# 1 · Verificación de Rtools
+
+`mfbvar` debe compilarse desde el código fuente, lo que requiere Rtools, una cadena de herramientas de compilación para Windows que es independiente de R. Este chunk verifica que esté instalado y disponible.
+
+```{r rtools-check}
+if (!requireNamespace("pkgbuild", quietly = TRUE)) {
+  install.packages("pkgbuild")
+}
+
+if (pkgbuild::has_build_tools(debug = FALSE)) {
+  cat("Rtools OK — herramientas de compilación encontradas\n")
+} else {
+  cat("Rtools NO encontrado — mfbvar no puede instalarse sin él.\n")
+  cat("Consulta la guía de solución de problemas de mfbvar para las instrucciones de instalación.\n")
+}
+```
+
+**Salida esperada:**
+```
+Rtools OK — herramientas de compilación encontradas
+```
+
+> Si ves `Rtools NO encontrado`, detente aquí y sigue la guía de solución de problemas de mfbvar antes de continuar.
+
+---
+
+# 2 · Instalación de paquetes
+
+Este chunk instala los paquetes que aún no estén presentes. Si todo ya está instalado, terminará silenciosamente en unos pocos segundos. `nowcastDFM` y `mfbvar` se instalan desde GitHub, paso que requiere Rtools.
+
+```{r install}
+cran_packages <- c(
+  "tidyverse",
+  "lubridate",
+  "openxlsx",
+  "Rmisc",
+  "imputeTS",
+  "midasr",
+  "devtools",
+  "jsonlite",
+  "pkgbuild"
+)
+
+# Instalar los paquetes de CRAN que falten
+missing <- cran_packages[!sapply(cran_packages, requireNamespace, quietly = TRUE)]
+if (length(missing) > 0) {
+  cat("Instalando:", paste(missing, collapse = ", "), "\n")
+  install.packages(missing)
+} else {
+  cat("Todos los paquetes de CRAN ya están instalados\n")
+}
+
+# Instalar nowcastDFM desde GitHub si no está presente
+if (!requireNamespace("nowcastDFM", quietly = TRUE)) {
+  cat("Instalando nowcastDFM desde GitHub...\n")
+  devtools::install_github("dhopp1/nowcastDFM")
+} else {
+  cat("nowcastDFM ya está instalado\n")
+}
+
+# Instalar mfbvar desde GitHub si no está presente
+if (!requireNamespace("mfbvar", quietly = TRUE)) {
+  cat("Instalando mfbvar desde GitHub...\n")
+  devtools::install_github("ankargren/mfbvar")
+} else {
+  cat("mfbvar ya está instalado\n")
+}
+```
+
+---
+
+# 3 · Verificación de librerías
+
+Este chunk carga todos los paquetes usados en los scripts del entrenamiento. Una ejecución limpia sin mensajes de error en rojo significa que el entorno está completo.
+
+```{r libraries}
+library(tidyverse)    # manipulación de datos y gráficos
+library(lubridate)    # aritmética de fechas
+library(openxlsx)     # importar/exportar Excel (Sesión 2b)
+library(Rmisc)        # CI(): intervalos de confianza para el prior del BVAR
+library(nowcastDFM)   # dfm(), predict_dfm(): Modelo de Factor Dinámico
+library(imputeTS)     # na_mean(): imputación de valores faltantes
+library(midasr)       # midas_r(), mls(): regresión MIDAS
+library(mfbvar)       # set_prior(), estimate_mfbvar(): MF-BVAR
+library(jsonlite)     # utilidades de parseo JSON
+library(devtools)     # instalación de paquetes desde GitHub
+
+cat("Todas las librerías cargadas correctamente\n")
+```
+
+**Salida esperada:**
+```
+Todas las librerías cargadas correctamente
+```
+
+> **Nota sobre `jsonlite`:** En algunas configuraciones de VS Code aparece una advertencia sobre `jsonlite` al iniciar R. Esto no afecta ninguna parte del flujo de trabajo del entrenamiento. Instalarlo explícitamente (como se hace arriba) resuelve la advertencia en la mayoría de los casos. Si persiste, ignórala.
+
+---
+
+# 4 · Pruebas de humo
+
+Cada modelo se ajusta sobre el mismo conjunto de datos sintéticos definido a continuación. El objetivo no es producir pronósticos con sentido económico, sino confirmar que la maquinaria de estimación corre de punta a punta en tu máquina.
+
+## 4.0 Datos sintéticos
+
+Tres series que imitan la configuración de nowcasting de Barbados: PIB real trimestral (`gdp_brb`) y dos indicadores mensuales (`x1_brb`, `x2_brb`). Todos los valores son generados aleatoriamente; solo la estructura (frecuencias, rango de fechas, borde irregular) replica los datos reales.
+
+```{r synthetic-data}
+set.seed(42)
+
+# Rango de fechas: 2010 T1 – 2024 T4 (60 trimestres, 180 meses)
+dates_q <- seq(as.Date("2010-01-01"), by = "quarter", length.out = 60)
+dates_m <- seq(as.Date("2010-01-01"), by = "month",   length.out = 180)
+
+# PIB trimestral (estilo Barbados: trayectoria de crecimiento acumulado)
+gdp_brb <- cumsum(rnorm(60, mean = 0.4, sd = 1.2))
+
+# Indicadores mensuales (correlacionados con el PIB vía factor compartido)
+factor  <- rep(gdp_brb, each = 3) + rnorm(180, sd = 0.5)
+x1_brb  <- factor + rnorm(180, sd = 0.8)   # ej. proxy de llegadas de turistas
+x2_brb  <- factor + rnorm(180, sd = 1.1)   # ej. proxy de exportaciones
+
+# DataFrame mensual combinado (PIB trimestral repetido a frecuencia mensual)
+df_smoke <- data.frame(
+  date    = dates_m,
+  gdp_brb = rep(gdp_brb, each = 3),   # valores trimestrales constantes dentro del trimestre
+  x1_brb  = x1_brb,
+  x2_brb  = x2_brb
+)
+
+cat(sprintf("Datos sintéticos OK — %d filas mensuales, %d obs. trimestrales, 3 series\n",
+            nrow(df_smoke), length(gdp_brb)))
+head(df_smoke)
+```
+
+**Salida esperada:**
+```
+Datos sintéticos OK — 180 filas mensuales, 60 obs. trimestrales, 3 series
+```
+
+---
+
+## 4.1 MIDAS
+
+```{r smoke-midas}
+# mls(x, 0:3, 3) usa 4 rezagos mensuales con ratio 3 = 12 obs. mensuales consumidas.
+# Alineamos recortando: conservamos trimestres 5:60 para y, meses 1:168 para x
+# (168 = 56 trimestres * 3 meses), de modo que ambos vectores tengan longitud 56.
+y_midas <- gdp_brb[5:60]        # 56 obs. trimestrales
+x_midas <- x1_brb[1:168]        # 56 * 3 = 168 obs. mensuales
+
+model_midas <- midas_r(
+  y_midas ~ mls(x_midas, 0:3, 3, nealmon),
+  start = list(x_midas = c(1, -0.5))
+)
+
+fcst_midas <- tail(fitted(model_midas), 1)
+cat(sprintf("MIDAS OK — ajuste dentro de muestra (última obs.): %.4f\n", fcst_midas))
+```
+
+**Salida esperada:**
+```
+MIDAS OK — ajuste dentro de muestra (última obs.): [número]
+```
+
+## 4.2 MF-BVAR
+
+```{r smoke-bvar}
+# mfbvar requiere objetos ts: series mensuales primero, trimestral al final
+x1_ts  <- ts(x1_brb, start = c(2010, 1), frequency = 12)
+x2_ts  <- ts(x2_brb, start = c(2010, 1), frequency = 12)
+gdp_ts <- ts(gdp_brb, start = c(2010, 1), frequency = 4)
+
+mf_list <- list(x1_brb = x1_ts, x2_brb = x2_ts, gdp_brb = gdp_ts)
+
+prior <- set_prior(Y = mf_list, n_lags = 3, n_reps = 50,
+                   block_exo = "gdp_brb")
+
+c_interval      <- t(sapply(mf_list,
+                   function(s) CI(na.omit(as.numeric(s)), ci = 0.95)))
+prior_intervals <- c_interval[, c("upper", "lower")]
+moments         <- interval_to_moments(prior_intervals)
+
+prior <- update_prior(prior,
+                      d               = "intercept",
+                      prior_psi_mean  = moments$prior_psi_mean,
+                      prior_psi_Omega = moments$prior_psi_Omega)
+prior <- update_prior(prior, n_fcst = 4)
+
+model_bvar <- estimate_mfbvar(prior, prior = "minn", variance = "iw")
+
+fcst_bvar <- predict(model_bvar, pred_bands = NULL) %>%
+  dplyr::filter(variable == "gdp_brb") %>%
+  pull(fcst) %>%
+  mean()
+
+cat(sprintf("BVAR OK — pronóstico promedio entre draws: %.4f\n", fcst_bvar))
+```
+
+**Salida esperada:**
+```
+BVAR OK — pronóstico promedio entre draws: [número]
+```
+
+# Resumen
+
+Corre este chunk al final. Da una vista de un vistazo de qué pasó.
+
+```{r summary}
+results <- list(
+  "Rtools"     = pkgbuild::has_build_tools(debug = FALSE),
+  "Librerías"  = all(sapply(c("tidyverse","lubridate","openxlsx","Rmisc",
+                               "nowcastDFM","imputeTS","midasr","mfbvar",
+                               "jsonlite"), requireNamespace, quietly = TRUE)),
+  "MIDAS"      = exists("fcst_midas"),
+  "BVAR"       = exists("fcst_bvar")
+)
+
+cat("=== Resumen de verificación del entorno ===\n")
+for (item in names(results)) {
+  status <- if (isTRUE(results[[item]])) "OK" else "FALLIDO"
+  cat(sprintf("  %-12s %s\n", item, status))
+}
+cat("===========================================\n")
+```
+
+**Salida esperada:**
+```
+=== Resumen de verificación del entorno ===
+  Rtools       OK
+  Librerías    OK
+  MIDAS        OK
+  BVAR         OK
+===========================================
+```
+
+> Si alguna línea muestra `FALLIDO`, desplázate hacia arriba hasta la sección correspondiente y lee la nota. Las cuatro deben mostrar `OK` antes de comenzar los ejercicios del entrenamiento.
