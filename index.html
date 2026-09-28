@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nowcasting Bolivia</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1d2530; --muted: #5b6675; --line: #e3e7ec;
+    --accent: #004e70; --soft: #eef4f7; --pending: #8a94a3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12171d; --fg: #e4e8ed; --muted: #9aa5b3; --line: #2a323c;
+      --accent: #6fb8d8; --soft: #1a232c; --pending: #6c7684;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12171d; --fg: #e4e8ed; --muted: #9aa5b3; --line: #2a323c;
+    --accent: #6fb8d8; --soft: #1a232c; --pending: #6c7684;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 780px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .intro p { margin: 0 0 12px; }
+  .note { background: var(--soft); border-radius: 8px; padding: 10px 14px; color: var(--muted); font-size: .92rem; }
+  section { border-top: 1px solid var(--line); padding: 18px 0; }
+  .when { color: var(--muted); font-size: .9rem; margin: 0; }
+  h2 { font-size: 1.1rem; margin: 2px 0 8px; }
+  ul { margin: 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .pending { color: var(--pending); font-style: italic; }
+  footer { border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Herramientas para el Nowcasting del Crecimiento del PIB: Bolivia</h1>
+  <p class="sub"><strong>Facilitadores:</strong> Jose L. Saboin, Diego Guerrero, Angelo Mazzocca</p>
+
+  <div class="intro">
+    <p>Programa de formación para profesionales del sector público que trabajan en política económica y estadísticas nacionales. Busca dotar a los participantes de los fundamentos teóricos y las habilidades prácticas para usar una herramienta de <em>nowcasting</em> en Python y R, aprovechando fuentes de datos estructurados y no estructurados en tiempo real (luces nocturnas, Google Trends, datos oficiales del INE y del BCB) para estimar oportunamente el crecimiento del PIB de Bolivia.</p>
+    <p>El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesiones sincrónicas de 1 h 30 por semana) con un cierre presencial de dos días en La Paz.</p>
+    <p class="note">Los materiales se publican a medida que avanza el curso. Las sesiones marcadas <em>próximamente</em> aún no tienen archivos.</p>
+  </div>
+
+  <section>
+    <p class="when">Semana 1 · 14 al 18 de septiembre</p>
+    <h2>Clínica de instalación</h2>
+    <ul>
+      <li><a href="https://github.com/guerreroda/nwcst_bol/blob/main/docs/20260914%20Guia%20de%20Instalacion_Bolivia.md">Guía de instalación</a></li>
+      <li>Archivos del entorno:
+        <a href="https://github.com/guerreroda/nwcst_bol/blob/main/activity/environment.yml">environment.yml</a> ·
+        <a href="https://github.com/guerreroda/nwcst_bol/blob/main/activity/environment-geo.yml">environment-geo.yml</a> ·
+        <a href="https://github.com/guerreroda/nwcst_bol/blob/main/activity/instalacion_manual.txt">Instalación manual</a></li>
+      <li><a href="https://github.com/guerreroda/nwcst_bol/blob/main/activity/act0_env_check.ipynb">Actividad 0: Verificación de Python</a></li>
+      <li><a href="https://github.com/guerreroda/nwcst_bol/blob/main/activity/act0_env_check_R.Rmd">Actividad 0: Verificación de R</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 1 · lunes 28 de septiembre, 11:00 – 12:30</p>
+    <h2>Fundamentos de Python</h2>
+    <ul>
+      <li><a href="https://github.com/guerreroda/nwcst_bol/blob/main/activity/act1_python_basics.ipynb">Actividad 1: Python básico</a></li>
+      <li>Datos:
+        <a href="https://github.com/guerreroda/nwcst_bol/blob/main/data/gdp.csv">gdp.csv</a> ·
+        <a href="https://github.com/guerreroda/nwcst_bol/blob/main/data/ntl.csv">ntl.csv</a> ·
+        <a href="https://github.com/guerreroda/nwcst_bol/blob/main/data/eia_brent.xlsx">eia_brent.xlsx</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 2 · jueves 1 de octubre, 10:00 – 11:30</p>
+    <h2>Datos: luces nocturnas y Google Trends</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 3 · viernes 2 de octubre, 15:30 – 17:00</p>
+    <h2>Datos: scraping y construcción de la base de datos</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 4 · jueves 8 de octubre, 10:00 – 11:30</p>
+    <h2>Fundamentos de R</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 5 · viernes 9 de octubre, 15:30 – 17:00</p>
+    <h2>Herramienta BID y modelos de series de tiempo</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 6 · lunes 12 de octubre, 11:00 – 12:30</p>
+    <h2>Modelos de nowcasting: regularización</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 7 · jueves 15 de octubre, 10:00 – 11:30</p>
+    <h2>Modelos de nowcasting: modelos basados en árboles</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <section>
+    <p class="when">Sesión 8 · viernes 16 de octubre, 15:30 – 17:00</p>
+    <h2>Modelos de nowcasting: red neuronal de corto y largo plazo (LSTM)</h2>
+    <ul><li class="pending">próximamente</li></ul>
+  </section>
+
+  <footer>Repositorio: <a href="https://github.com/guerreroda/nwcst_bol">github.com/guerreroda/nwcst_bol</a></footer>
+</main>
+</body>
+</html>
