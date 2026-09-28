@@ -1,6 +1,14 @@
 # Slides in progress: not published yet. Delete this line to publish them.
 slides/
 
+# Claude Code files: instructions and working notes stay private
+CLAUDE.md
+**/CLAUDE.md
+CLAUDE.local.md
+**/CLAUDE.local.md
+.claude/
+ai-notes/
+
 # Machine-local cruft
 .ipynb_checkpoints/
 __pycache__/
