@@ -1,0 +1,13 @@
+# Slides in progress: not published yet. Delete this line to publish them.
+slides/
+
+# Machine-local cruft
+.ipynb_checkpoints/
+__pycache__/
+.Rhistory
+.RData
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+*conflicted copy*
