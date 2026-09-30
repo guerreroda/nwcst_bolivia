@@ -1,5 +1,5 @@
-# Slides in progress: not published yet. Delete this line to publish them.
-slides/
+# Not published
+videos/
 
 # Claude Code files: instructions and working notes stay private
 CLAUDE.md
@@ -19,3 +19,9 @@ Thumbs.db
 desktop.ini
 ~$*
 *conflicted copy*
+
+# Created when the notebooks run: tiles, temp files, results, cached borders
+hfiles/
+ntl_tmp/
+output/
+**/shapes/

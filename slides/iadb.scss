@@ -1,0 +1,164 @@
+/*-- scss:defaults --*/
+
+// Revisión del tema de Workshop DC para Bolivia.
+// Mismos colores de marca; más aire, divisores azul-BID a pantalla completa,
+// portada en degradado y un acento ámbar corto bajo cada título.
+
+// ---- Paleta ----------------------------------------------------------------
+$bid-azul:        #005BAC;   // primario
+$bid-azul-oscuro: #003D73;   // títulos, divisores
+$bid-noche:       #002B55;   // extremo oscuro del degradado
+$bid-cielo:       #9CC7EC;   // texto secundario sobre azul
+$bid-turquesa:    #00899C;   // acento frío
+$bid-ambar:       #F4A100;   // acento cálido (sólo decorativo, no texto)
+$tinta:           #1A2330;
+$gris:            #5B6B7B;
+$linea:           #E3E8EE;
+$panel:           #F4F7FA;
+
+// ---- Tipografía (pila del sistema: nada que descargar al presentar) ---------
+$font-family-sans-serif: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif !default;
+$presentation-font-size-root: 28px;
+$presentation-heading-font: $font-family-sans-serif;
+$presentation-heading-color: $bid-azul-oscuro;
+$presentation-heading-font-weight: 650;
+$presentation-heading-letter-spacing: -0.01em;
+$presentation-line-height: 1.4;
+
+$body-color: $tinta;
+$body-bg: #ffffff;
+$link-color: $bid-azul;
+$link-color-hover: $bid-turquesa;
+$selection-bg: rgba($bid-azul, 0.18);
+
+$code-block-font-size: 0.6em;
+$code-color: $bid-azul-oscuro;
+
+/*-- scss:rules --*/
+
+.reveal .slides { text-align: left; }
+.reveal p, .reveal li { color: $tinta; }
+
+// ---- Portada ----------------------------------------------------------------
+.reveal .slides section.quarto-title-block {
+  text-align: left;
+  h1, p, div { text-align: left !important; }
+  .quarto-title-author-name { padding-left: 0 !important; margin-left: 0 !important; }
+  .title {
+    color: #fff; font-size: 2.3em; font-weight: 700; line-height: 1.1;
+    margin-bottom: .2em;
+  }
+  .title::after {                        // acento ámbar bajo el título
+    content: ""; display: block; width: 88px; height: 5px;
+    background: $bid-ambar; border-radius: 3px; margin-top: .45em;
+  }
+  .subtitle { color: $bid-cielo; font-size: .95em; font-weight: 400; margin-top: .8em; }
+  .quarto-title-authors { justify-content: flex-start; margin-top: 1.4em; }
+  .quarto-title-author { padding-left: 0; }
+  .quarto-title-author-name, .quarto-title-affiliation { color: #fff; font-size: .72em; }
+  .institute { color: $bid-cielo; font-size: .6em; letter-spacing: .08em; text-transform: uppercase; }
+}
+
+// ---- Divisores de sección: fondo azul-BID a pantalla completa ---------------
+// Uso en el .qmd:  # Título {.divisor background-color="#003D73"}
+.reveal .slides section.divisor {
+  h1 {
+    color: #fff; font-size: 2.2em; font-weight: 700; line-height: 1.1;
+    margin-top: 1.6em;
+  }
+  h1::after {
+    content: ""; display: block; width: 72px; height: 5px;
+    background: $bid-ambar; border-radius: 3px; margin-top: .4em;
+  }
+  p, li { color: $bid-cielo; font-size: .95em; }
+  .etiqueta {                            // "PARTE 1" encima del título
+    color: $bid-cielo; font-size: .6em; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+  }
+}
+
+// En fondos oscuros: sin logo (el PNG tiene fondo blanco) y número claro
+.reveal.has-dark-background .slide-logo { display: none !important; }
+.reveal.has-dark-background .slide-menu-button a { color: $bid-cielo !important; }
+.reveal.has-dark-background .slide-number { color: $bid-cielo; }
+
+// ---- Títulos de diapositiva -------------------------------------------------
+.reveal h2 {
+  font-size: 1.3em;
+  margin-bottom: .7em;
+  padding-bottom: .25em;
+  position: relative;
+}
+.reveal h2::after {
+  content: ""; position: absolute; left: 0; bottom: 0;
+  width: 56px; height: 4px; background: $bid-ambar; border-radius: 2px;
+}
+.reveal h3 { font-size: 1em; color: $bid-azul; font-weight: 600; margin-bottom: .4em; }
+
+.reveal strong { color: $bid-azul-oscuro; }
+.reveal em { color: $gris; }
+
+// ---- Viñetas ---------------------------------------------------------------
+.reveal ul { list-style: none; margin-left: 0; }
+.reveal ul li { position: relative; padding-left: 1.05em; margin-bottom: .4em; }
+.reveal ul li::before {
+  content: ""; position: absolute; left: 0; top: .6em;
+  width: .38em; height: .38em; background: $bid-azul; border-radius: 50%;
+}
+.reveal ul ul li::before { background: transparent; border: 2px solid $bid-azul; }
+.reveal ol li { margin-bottom: .4em; }
+.reveal ol li::marker { color: $bid-azul; font-weight: 700; }
+
+// ---- Enlaces ------------------------------------------------------------------
+.reveal a { color: $link-color; text-decoration: none; border-bottom: 1px solid rgba($bid-azul, .35); }
+.reveal a:hover { color: $link-color-hover; border-color: $bid-turquesa; }
+
+// ---- Tablas -------------------------------------------------------------------
+.reveal table { border-collapse: collapse; font-size: .8em; }
+.reveal table thead th {
+  background: $bid-azul-oscuro; color: #fff; font-weight: 600;
+  border: none; padding: .5em .8em;
+}
+.reveal table td { border: none; border-bottom: 1px solid $linea; padding: .45em .8em; }
+.reveal table tbody tr:nth-child(even) { background: $panel; }
+
+// ---- Código -------------------------------------------------------------------
+.reveal div.sourceCode, .reveal pre { border-radius: 10px; }
+.reveal pre {
+  background: $panel; border: 1px solid $linea; border-left: 4px solid $bid-azul;
+  box-shadow: none; padding: .6em .9em;
+}
+.reveal pre code { background: transparent; }
+
+// ---- Paneles de apoyo -----------------------------------------------------------
+// ::: {.nota}      recuadro claro con borde azul
+// ::: {.alerta}    recuadro con borde ámbar (advertencias)
+.reveal .nota, .reveal .alerta {
+  background: $panel; border-radius: 10px; padding: .6em 1em; margin-top: .6em;
+  font-size: .85em;
+}
+.reveal .nota   { border-left: 5px solid $bid-azul; }
+.reveal .alerta { border-left: 5px solid $bid-ambar; }
+.reveal .nota p, .reveal .alerta p { margin: .2em 0; }
+
+// ::: {.cifra}  número grande + leyenda (usar dentro de columnas)
+.reveal .cifra {
+  .valor { font-size: 2.3em; font-weight: 700; color: $bid-azul; line-height: 1; }
+  .leyenda { font-size: .72em; color: $gris; margin-top: .3em; }
+}
+
+// cifra grande: .cifra.grande
+.reveal .cifra.grande .valor { font-size: 3.6em; }
+.reveal .cifra.grande .leyenda { font-size: .85em; }
+
+.reveal blockquote {
+  border-left: 5px solid $bid-azul; background: $panel; padding: .6em 1em;
+  font-style: normal; box-shadow: none; width: auto; margin: .6em 0;
+}
+
+.reveal .fuente { display: block; font-size: .48em; line-height: 1.3; color: $gris; margin-top: .4em; }
+
+// ---- Cromo --------------------------------------------------------------------
+.reveal .slide-number { background: transparent; color: $gris; font-size: .5em; }
+.reveal .progress { color: $bid-ambar; height: 3px; }
+.reveal .slide-logo { max-height: 42px !important; opacity: .9; }

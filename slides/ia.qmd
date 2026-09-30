@@ -1,0 +1,93 @@
+---
+title: "Inteligencia artificial para programar"
+subtitle: "Sesión 1 · lunes 28 de septiembre de 2026"
+---
+
+## Qué es, en una diapositiva
+
+Un **modelo de lenguaje** (ChatGPT, Claude, Gemini) aprendió de enormes cantidades de texto y código a **predecir la continuación más probable** de lo que se le escribe.
+
+:::: {.columns}
+::: {.column width="50%"}
+### Lo hace bien
+- escribir código repetitivo
+- explicar un mensaje de error
+- traducir entre Python y R
+- documentar y comentar
+:::
+::: {.column width="50%"}
+### Lo hace mal
+- **cifras y datos**: los inventa con total seguridad
+- librerías o funciones que **no existen**
+- información reciente
+- saber si su propio código funciona
+:::
+::::
+
+::: notes
+~1,5 min. Clave: escribe texto plausible, no verificado. Plausible ≠ correcto.
+:::
+
+## Del chat al agente
+
+:::: {.columns}
+::: {.column width="50%"}
+### Chat
+Usted copia el código, lo pega, lo corre, copia el error de vuelta…
+
+Útil para preguntas puntuales.
+:::
+::: {.column width="50%"}
+### Agente (ej. Claude Code)
+Trabaja **dentro de la carpeta del proyecto**: lee los archivos, escribe código, lo **ejecuta**, lee el error y corrige.
+
+Pide permiso antes de cada acción.
+:::
+::::
+
+::: {.nota}
+Buena parte de este taller se construyó con un agente: los descargadores del INE y el BCB, la traducción de los cuadernos y estas mismas diapositivas.
+:::
+
+# Lo que funcionó, y lo que no {.divisor background-color="#003D73"}
+
+[Ejemplos reales de este proyecto]{.etiqueta}
+
+## Donde ayudó
+
+- **Diagnóstico:** Google Trends había fallado en versiones anteriores del proyecto. La causa no era un bloqueo sino una librería **archivada** (`pytrends`); se cambió por `trendspy`
+- **Búsqueda:** la lista de archivos de comercio de Canadá parecía incompleta; consultando la API del portal aparecieron **8 conjuntos sin huecos**, no 6
+- **Revisión:** una nota decía que Bolivia no tocaba la pieza satelital h12v11. Contra el polígono oficial: **sí la toca** (0,02 %)
+
+## Donde hubo que corregir
+
+- Redactó que la correlación entre el Brent y el PIB «podría ser débil». **Con los datos: 0,78.** El texto se cambió
+- Un parámetro de fechas que quedó vacío descargó **490 GB** de imágenes satelitales y llenó el disco: nadie lo revisó antes de ejecutar
+
+::: {.alerta}
+La regla: **toda cifra se verifica ejecutando el código**, nunca leyendo la respuesta. La responsabilidad sigue siendo de quien firma el análisis.
+:::
+
+::: notes
+~1,5 min. Los dos errores tienen el mismo origen: nadie verificó antes de seguir.
+:::
+
+## Cómo pedir bien
+
+| en vez de… | pida… |
+|---|---|
+| «haz un nowcast» | «carga `gdp.csv` y `ntl.csv`, pasa las luces a trimestral y grafica la variación interanual» |
+| «no funciona» | el mensaje de error **completo** y la celda que lo produjo |
+| aceptar el código | «explícame qué hace cada línea» |
+| un paso gigante | pasos pequeños, verificando cada uno |
+
+## Datos y confidencialidad
+
+- Lo que se escribe en una herramienta en la nube **sale de su computadora**
+- **No** pegue datos confidenciales, no publicados o personales
+- Consulte la **política de su institución** sobre herramientas de IA
+- Para el taller: sólo datos **públicos** (INE, BCB, FRED, NASA)
+
+::: {.nota}
+**Demostración en vivo:** una variante de la Actividad 1 resuelta con Claude Code, verificada celda por celda.
+:::

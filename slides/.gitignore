@@ -1,0 +1,3 @@
+/.quarto/
+**/*.quarto_ipynb
+img/_map_sep_cache.npz

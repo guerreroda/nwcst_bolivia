@@ -1,0 +1,24 @@
+project:
+  type: default
+
+lang: es
+author: "Diego A. Guerrero"
+institute: "Herramientas para el Nowcasting del Crecimiento del PIB · Bolivia"
+
+format:
+  revealjs:
+    theme: [simple, iadb.scss]
+    embed-resources: true
+    width: 1280
+    height: 720
+    margin: 0.08
+    slide-number: c/t
+    transition: fade
+    background-transition: fade
+    logo: img/logo-iadb.png
+    code-overflow: wrap
+    hash-type: number
+
+title-slide-attributes:
+  data-background-color: "#003D73"
+  data-background-gradient: "linear-gradient(135deg, #002B55 0%, #003D73 45%, #005BAC 100%)"

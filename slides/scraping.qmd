@@ -1,0 +1,112 @@
+---
+title: "Scraping y datos públicos"
+subtitle: "Sesión 3 · viernes 2 de octubre de 2026"
+---
+
+## Tres maneras de traer un dato
+
+| | cómo | ejemplo en este taller |
+|---|---|---|
+| **API** | pedir datos a un servicio que responde en formato estructurado | FRED (precios de metales, tasas de EE.UU.) |
+| **Archivo directo** | descargar un `.xlsx` / `.csv` desde una URL fija | EIA (Brent), US Census (comercio) |
+| **Página web** | leer el HTML, encontrar el enlace o la tabla, y descargar | INE, BCB |
+
+::: {.nota}
+Preferir siempre en ese orden: una API es estable y documentada; una página web cambia sin aviso.
+:::
+
+::: notes
+~1 min. El resto de la charla es sobre la tercera fila, porque es donde están los datos bolivianos.
+:::
+
+## Una API en cinco líneas
+
+```{.python}
+import requests, pandas as pd
+
+url = "https://api.stlouisfed.org/fred/series/observations"
+params = {"series_id": "PZINCUSDM", "api_key": CLAVE, "file_type": "json"}
+obs = requests.get(url, params=params, timeout=30).json()["observations"]
+
+zinc = pd.DataFrame(obs)[["date", "value"]]
+```
+
+- La **clave** es gratuita y personal: no se comparte ni se sube a GitHub
+- Leer la documentación: nombres de series, límites de consultas
+
+::: notes
+~1 min. Anécdota: FRED no tiene plata ni oro (PSILVERUSDM da error 400); el sustituto es el índice de precios de la minería de oro y plata.
+:::
+
+# Datos bolivianos {.divisor background-color="#003D73"}
+
+[Lo que aprendimos descargando el INE y el BCB]{.etiqueta}
+
+## INE: el enlace no dice qué archivo es
+
+:::: {.columns}
+::: {.column width="55%"}
+- Los cuadros se sirven como `/download` sin extensión `.xls`
+- Se busca el enlace **por su texto**, con el título completo
+- Dos títulos casi iguales: PIB **nominal** y PIB en **volumen encadenado**
+:::
+::: {.column width="45%"}
+```{.python}
+from bs4 import BeautifulSoup
+sopa = BeautifulSoup(html, "html.parser")
+titulo = ("BOLIVIA: MEDIDAS DE VOLUMEN "
+          "ENCADENADAS DEL PRODUCTO...")
+enlace = next(a["href"] for a in sopa.find_all("a")
+              if a.get_text().strip().upper()
+                  .startswith(titulo))
+```
+:::
+::::
+
+::: {.alerta}
+**Compruebe que bajó el correcto.** El deflactor implícito (nominal ÷ real) debe subir de ~98 a ~145: si baja, las series están al revés.
+:::
+
+## BCB: el nombre del archivo cambia cada semana
+
+- El boletín semanal se llama `Semanal 38_2026.xlsx`, la próxima semana `Semanal 39_2026.xlsx`
+- Espacios irregulares y codificación: `Semanal%2038_2026`, `Semanal 33_ 2026`
+- Solución: leer la página, **decodificar** los enlaces y quedarse con la semana más alta
+- Las series se buscan **por nombre**, no por número de fila: el diseño de la hoja cambia
+
+::: notes
+~1 min. La fila 57 de 2022 hoy es una celda vacía. Buscar por etiqueta sobrevive a esos cambios.
+:::
+
+## Cuando el servidor no coopera
+
+:::: {.columns}
+::: {.column width="50%"}
+### Síntomas
+- `403 Forbidden`
+- la descarga se queda colgada
+- funciona un día y al otro no
+:::
+::: {.column width="50%"}
+### Qué hacer
+- probar otro *user-agent* o librería (`urllib` en vez de `requests`)
+- `timeout` y **un** reintento, no un bucle infinito
+- si falla, **avisar y seguir** con lo que ya se tiene
+:::
+::::
+
+::: {.alerta}
+**Nunca sobrescribir datos buenos con una descarga parcial.** Combine lo nuevo con el archivo existente antes de guardar.
+:::
+
+## Buenas prácticas
+
+1. Guardar el archivo **crudo, sin editar**, un CSV por fuente (`raw/`)
+2. Limpiar y unir **después**, en un paso aparte y reproducible
+3. Una pausa entre consultas: el servidor es de todos
+4. Leer los términos de uso del sitio
+5. Anotar de dónde salió cada serie (URL, fecha de descarga)
+
+::: {.nota}
+**Actividad:** `0_data_download.ipynb` — INE, BCB, FRED y EIA en un solo cuaderno.
+:::
