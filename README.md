@@ -11,10 +11,10 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 ---
 
 **Semana 1 — 14 al 18 de septiembre · Clínica de instalación**
-- [Guía de instalación](instalacion/20260914%20Guia%20de%20Instalacion_Bolivia.md)
-- Archivos del entorno: [environment.yml](instalacion/environment.yml) · [environment-geo.yml](instalacion/environment-geo.yml) · [Instalación manual](instalacion/instalacion_manual.txt)
-- [Actividad 0: Verificación de Python](instalacion/act0_env_check.ipynb)
-- [Actividad 0: Verificación de R](instalacion/act0_env_check_R.Rmd)
+- [Guía de instalación](install/20260914%20Guia%20de%20Instalacion_Bolivia.md)
+- Archivos del entorno: [environment.yml](install/environment.yml) · [environment-geo.yml](install/environment-geo.yml) · [Instalación manual](install/instalacion_manual.txt)
+- [Actividad 0: Verificación de Python](install/act0_env_check.ipynb)
+- [Actividad 0: Verificación de R](install/act0_env_check_R.Rmd)
 
 **Sesión 1 — lunes 28 de septiembre, 11:00 – 12:30 · Fundamentos de Python**
 - [Actividad 1: Python básico](activity/act1_python_basics.ipynb)
