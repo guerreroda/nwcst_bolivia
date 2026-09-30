@@ -11,6 +11,7 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 ---
 
 **Semana 1 — 14 al 18 de septiembre · Clínica de instalación**
+- [Video: Instalación de Python (12 min)](https://www.dropbox.com/scl/fi/g0wsnzkcx3ws0zh448x6v/instalacion_python-360p.mp4?rlkey=6nleh1wngtonbr5r54qs2vc0c&dl=0)
 - [Guía de instalación](install/20260914%20Guia%20de%20Instalacion_Bolivia.md)
 - Archivos del entorno: [environment.yml](install/environment.yml) · [environment-geo.yml](install/environment-geo.yml) · [Instalación manual](install/instalacion_manual.txt)
 - [Actividad 0: Verificación de Python](install/act0_env_check.ipynb)
@@ -21,6 +22,7 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 - Datos: [gdp.csv](data/gdp.csv) · [ntl.csv](data/ntl.csv) · [eia_brent.xlsx](data/eia_brent.xlsx)
 
 **Sesión 2 — jueves 1 de octubre, 10:00 – 11:30 · Datos: luces nocturnas y Google Trends**
+- [Video: Teoría de luces nocturnas (20 min)](https://www.dropbox.com/scl/fi/kj7ruqadngw90jq4sjjm7/teoria_nightlights-360p.mp4?rlkey=5runlyixuu5i1yn3f0c2r4oas&dl=0)
 - Presentaciones: [Luces nocturnas](https://guerreroda.github.io/nwcst_bolivia/slides/luces_nocturnas.html) · [Google Trends](https://guerreroda.github.io/nwcst_bolivia/slides/google_trends.html)
 - [Actividad 2: Luces nocturnas](activity/act2_ntl.ipynb) · [config.py](activity/config.py) · [ntl_helpers.py](activity/ntl_helpers.py) · [Coordinates.xlsx](raw/Coordinates.xlsx)
 - [Actividad 3: Google Trends](activity/act3_gtrends.ipynb)
