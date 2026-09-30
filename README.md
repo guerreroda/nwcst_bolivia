@@ -23,6 +23,7 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 
 **Sesión 2 — jueves 1 de octubre, 10:00 – 11:30 · Datos: luces nocturnas y Google Trends**
 - [Video: Teoría de luces nocturnas (20 min)](https://www.dropbox.com/scl/fi/kj7ruqadngw90jq4sjjm7/teoria_nightlights-360p.mp4?rlkey=5runlyixuu5i1yn3f0c2r4oas&dl=0)
+- [Video: Teoría de Google Trends (12 min)](https://www.dropbox.com/scl/fi/viou8jfxwh4i6ki80pvq0/teoria_gtrends-360p.mp4?rlkey=h05asr5ph59jsvr60q8ya7ctd&st=6j11l798&dl=0)
 - Presentaciones: [Luces nocturnas](https://guerreroda.github.io/nwcst_bolivia/slides/luces_nocturnas.html) · [Google Trends](https://guerreroda.github.io/nwcst_bolivia/slides/google_trends.html)
 - [Actividad 2: Luces nocturnas](activity/act2_ntl.ipynb) · [config.py](activity/config.py) · [ntl_helpers.py](activity/ntl_helpers.py) · [Coordinates.xlsx](raw/Coordinates.xlsx)
 - [Actividad 3: Google Trends](activity/act3_gtrends.ipynb)
