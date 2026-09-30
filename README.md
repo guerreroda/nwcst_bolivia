@@ -1,4 +1,4 @@
-# Herramientas para el Nowcasting del Crecimiento del PIB: Bolivia
+# [Herramientas para el Nowcasting del Crecimiento del PIB: Bolivia](https://guerreroda.github.io/nwcst_bolivia/index.html)
 
 **Facilitadores**: Jose L. Saboin, Diego Guerrero, Angelo Mazzocca
 
@@ -21,7 +21,7 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 - Datos: [gdp.csv](data/gdp.csv) · [ntl.csv](data/ntl.csv) · [eia_brent.xlsx](data/eia_brent.xlsx)
 
 **Sesión 2 — jueves 1 de octubre, 10:00 – 11:30 · Datos: luces nocturnas y Google Trends**
-- Presentaciones: [Luces nocturnas](slides/luces_nocturnas.html) · [Google Trends](slides/google_trends.html)
+- Presentaciones: [Luces nocturnas](https://guerreroda.github.io/nwcst_bolivia/slides/luces_nocturnas.html) · [Google Trends](https://guerreroda.github.io/nwcst_bolivia/slides/google_trends.html)
 - [Actividad 2: Luces nocturnas](activity/act2_ntl.ipynb) · [config.py](activity/config.py) · [ntl_helpers.py](activity/ntl_helpers.py) · [Coordinates.xlsx](raw/Coordinates.xlsx)
 - [Actividad 3: Google Trends](activity/act3_gtrends.ipynb)
 - Datos: [BOL_GTrends_Keywords_2026-09-18.xlsx](data/BOL_GTrends_Keywords_2026-09-18.xlsx)
@@ -46,4 +46,4 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 
 ---
 
-Página del curso: [index.html](index.html)
+Página del curso: [https://guerreroda.github.io/nwcst_bolivia/index.html](https://guerreroda.github.io/nwcst_bolivia/index.html)
