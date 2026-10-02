@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos del PIB Trimestral - Cuentas Nacionales de Bolivia</title>
+        <link rel="icon" type="image/png" href="IMG/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-button {
+            padding: 1rem 1.5rem; border-bottom-width: 2px; font-weight: 500; font-size: 1.125rem;
+            outline: none; color: #6B7280;
+        }
+        .tab-button:hover {
+            color: #4B5563; border-color: #D1D5DB;
+        }
+        .tab-button.active {
+            border-color: #b91c1c; color: #b91c1c; border-bottom-color: transparent; background-color: white;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        #activitySelector option { padding: 4px; }
+        .noUi-target {
+            border-radius: 9999px; background: #D1D5DB; border: none; box-shadow: none;
+        }
+        .noUi-connect { background: #b91c1c; } /* Red-700 */
+        .noUi-handle {
+            border-radius: 50%; background: #b91c1c; border: 2px solid white; /* Red-700 */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;
+        }
+        .noUi-handle:focus { outline: none; }
+        .noUi-horizontal { height: 8px; }
+        .noUi-horizontal .noUi-handle { width: 20px; height: 20px; right: -10px; top: -6px; }
+        .noUi-tooltip {
+            font-size: 12px; padding: 2px 4px; border-radius: 4px;
+            background-color: #7f1d1d; color: white; border: none; /* Red-900 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-gray-200 text-gray-800 shadow-md">
+  <div class="container mx-auto flex flex-col items-center text-center">
+    <a href="https://www.ine.gob.bo/" target="_blank">
+      <img src="IMG/banner.png" 
+           alt="Logo del Instituto Nacional de Estadística de Bolivia" 
+           class="mx-auto rounded-b-2xl shadow-md">
+    </a>
+    <!-- Logo Bicentenario opcional -->
+    <!--
+    <a href="https://bicentenario.bo/" target="_blank" class="mt-4">
+      <img src="IMG/LOGO BICENTENARIO.png" 
+           alt="Logo del Bicentenario de Bolivia" 
+           class="h-14 sm:h-16 mx-auto">
+    </a>
+    -->
+  </div>
+  
+</header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Producto Interno Bruto Trimestral</h1>
+                <a href="index.html#seccion-indice" 
+                class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-300 w-full sm:w-auto text-center">
+                &larr; Volver a la página principal
+                </a>
+            </div>
+
+            <div class="border-b border-gray-200 mb-8">
+                <nav id="tabs" class="flex flex-wrap -mb-px">
+                    <button data-target="introduccion" class="tab-button active">Introducción</button>
+                    <button data-target="cuadros" class="tab-button">Cuadros Estadísticos</button>
+                    <!--
+                    <button data-target="metodologias" class="tab-button">Metodologías</button>
+                    -->
+                </nav>
+            </div>
+
+            <div>
+                <div id="introduccion" class="tab-content active">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Análisis del PIB Trimestral</h2>
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                El PIB trimestral ofrece una visión de corto plazo de la evolución de la economía. Es una herramienta esencial para el seguimiento coyuntural y la toma de decisiones. La nueva estimación se alinea con el "Manual de Cuentas Nacionales Trimestrales 2017" del FMI, que introduce mejoras en técnicas de <span class="font-semibold">benchmarking</span>, ajuste estacional y comunicación de revisiones.
+                            </p>
+                            <div class="mt-6 bg-red-50 border-l-4 border-red-700 p-4 rounded-r-lg">
+                                 <h4 class="text-lg font-semibold text-gray-800 mb-2">Manual de Referencia</h4>
+                                 <p class="text-gray-700 mb-4">Consulte el documento oficial para una comprensión profunda de los estándares aplicados.</p>
+                                 <a href="https://www.imf.org/external/pubs/ft/qna/pdf/2017/QNAManual2017SPA.pdf" target="_blank" class="bg-red-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-900 transition-colors duration-300 inline-block">Descargar Manual</a>
+                            </div>
+ 			    <div class="mt-6 bg-red-50 border-l-4 border-red-700 p-4 rounded-r-lg">
+                                 <h4 class="text-lg font-semibold text-gray-800 mb-2">Nota Metodológica</h4>
+                                 <a href="https://nube.ine.gob.bo/index.php/s/WMhYne46Dcn8fwP/download" target="_blank" class="bg-red-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-900 transition-colors duration-300 inline-block">Descargar Nota</a>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                            <h3 class="text-xl font-semibold text-center mb-4">Crecimiento y Contribución al PIB Trimestral (%)</h3>
+                            <div class="h-64 mb-4">
+                                <canvas id="growthChart"></canvas>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <label class="text-sm font-medium text-gray-700 whitespace-nowrap">Rango:</label>
+                                    <div id="timeSlider" class="w-full mx-2"></div>
+                                </div>
+                                <div>
+                                    <label for="activitySelector" class="text-sm font-medium text-gray-700 mb-1 block">Seleccione actividades (Ctrl+Click):</label>
+                                    <select id="activitySelector" multiple class="w-full p-2 border border-gray-300 rounded-md text-sm h-24"></select>
+                                </div>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <button id="contributionBtn" class="w-full bg-red-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-900 text-sm">Mostrar Contribuciones</button>
+                                     <button id="clearBtn" class="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 text-sm">Limpiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="cuadros" class="tab-content p-4">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 mt-8">Precios corrientes</h2>
+                    <div class="space-y-4">
+                        <a href="https://nube.ine.gob.bo/index.php/s/mvRnhfidKJeJfsv/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: PRODUCTO INTERNO BRUTO  POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/q51Rr0Dp2XC5Slo/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: ESTRUCTURA DEL PRODUCTO INTERNO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/17KwlvhwPtpkEPH/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VALOR AGREGADO BRUTO A PRECIOS CORRIENTES POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/A5DxGVcnu9FM0xR/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: ESTRUCTURA DEL VALOR AGREGADO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+
+                        <a href="https://nube.ine.gob.bo/index.php/s/pkGnaCmO6tpRvgK/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/hewOHNG3DGoL5hL/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: ESTRUCTURA DEL PRODUCTO INTERNO BRUTO A PRECIOS CORRIENTES POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 - 2025</span></a> 
+                        
+                        
+                        <!--<a href="CUADROS/pagina_web/G_03.01.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 – 2025</span></a>
+
+                        <a href="CUADROS/pagina_web/G_03.02.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: ESTRUCTURA DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+-->
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 mt-8">Medidas de volumen encadenadas con año de referencia 2017</h2>
+                    <div class="space-y-4">
+                        <a href="https://nube.ine.gob.bo/index.php/s/1RFsK6XS7ZuMXaH/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/JVqHZtWjpifKc1D/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: INDICES DE VOLUMEN ENCADENADOS DEL PRODUCTO INTERNO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/elvT17FSHM0hveX/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/pooLtCIFKjl0cQi/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN ACUMULADA DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR ACTIVIDAD ECONÓMICA, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/uIj0pGEwtIacBj4/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIÓN A LA VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR ACTIVIDAD ECONÓMICA, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/e6te3KQv7cT3kXQ/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIÓN A LA VARIACIÓN ACUMULADA DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR ACTIVIDAD ECONÓMICA, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/fEz6MqEOjVy7kjT/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: MEDIDAS DE VOLUMEN ENCADENADAS DEL VALOR AGREGADO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/YVYnnfGBARHDwMC/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: INDICES DE VOLUMEN ENCADENADOS DEL VALOR AGREGADO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/ySix1fqKIdaBhmr/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL VALOR AGREGADO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/yw0mIIhxr76V6ry/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN ACUMULADA DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL VALOR AGREGADO BRUTO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/y2FnxztQzaPkNl9/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIÓN A LA VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS  DEL VALOR AGREGADO BRUTO A SIMILAR PERIODO POR GRUPOS DE ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/ClW58hxkrUuufel/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIÓN A LA VARIACIÓN ACUMULADA DE LAS MEDIDAS DE VOLUMEN ENCADENADAS  DEL VALOR AGREGADO BRUTO A SIMILAR PERIODO POR ACTIVIDAD ECONÓMICA SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+
+                        <!--<a href="CUADROS/pagina_web/G_03.03.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 – 2025</span></a>
+                        <a href="CUADROS/pagina_web/G_03.04.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: INDICES DE VOLUMEN ENCADENADOS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 – 2025</span></a>
+                        <a href="CUADROS/pagina_web/G_03.05.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 – 2025</span></a>
+                        <a href="CUADROS/pagina_web/G_03.05.01.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN ACUMULADA DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 – 2025</span></a>
+                        <a href="CUADROS/pagina_web/G_03.05.02.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VARIACIÓN A DOCE MESES DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2019 – 2025</span></a>
+                        <a href="CUADROS/pagina_web/G_03.05.03.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIÓN A LA VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 – 2025</span></a>
+                        <a href="CUADROS/pagina_web/G_03.05.04.xlsx" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIÓN ACUMULADA A LA VARIACIÓN DE LAS MEDIDAS DE VOLUMEN ENCADENADAS DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+						-->
+
+                        <a href="https://nube.ine.gob.bo/index.php/s/o4mdb7rYkI8hVu9/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: VOLUMEN ENCADENADO DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2017 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/Llh3q00LGhYDnjw/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CRECIMIENTO DEL PRODUCTO INTERNO BRUTO A SIMILAR PERIODO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/EreOh4HJ20zGYlh/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CRECIMIENTO ACUMULADO DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/vhm2SPcnONzcbRJ/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIONES AL CRECIMIENTO DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+                        <a href="https://nube.ine.gob.bo/index.php/s/VkO702VwvFmZYlv/download" download class="flex items-center text-red-700 hover:text-red-900 font-semibold transition-colors duration-300"><svg class="h-5 w-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span>BOLIVIA: CONTRIBUCIONES AL CRECIMIENTO ACUMULADO DEL PRODUCTO INTERNO BRUTO POR TIPO DE GASTO SEGÚN TRIMESTRE, 2018 - 2025</span></a>
+
+
+                    </div>
+                </div>
+
+                <div id="metodologias" class="tab-content p-4">
+                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Metodología del Cálculo del PIB Trimestral</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        Esta sección detalla los aspectos metodológicos del cálculo trimestral, incluyendo los indicadores de coyuntura utilizados y los métodos de desestacionalización.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-200 text-gray-800 mt-16">
+        <div class="container mx-auto px-6 py-6 text-center">
+            <p>&copy; 2025 Instituto Nacional de Estadística. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Tabs Logic ---
+            const tabsContainer = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabsContainer.addEventListener('click', (event) => {
+                const targetButton = event.target.closest('button');
+                if (!targetButton) return;
+                const targetContentId = targetButton.dataset.target;
+                tabButtons.forEach(button => button.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                targetButton.classList.add('active');
+                document.getElementById(targetContentId).classList.add('active');
+            });
+
+            // --- Chart Data & Logic ---
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            const slider = document.getElementById('timeSlider');
+            const activitySelector = document.getElementById('activitySelector');
+            const contributionBtn = document.getElementById('contributionBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            
+const fullData = {
+  labels: [
+    '2018-T1', '2018-T2', '2018-T3', '2018-T4', '2019-T1', '2019-T2', '2019-T3', '2019-T4', '2020-T1', '2020-T2', '2020-T3', '2020-T4', '2021-T1', '2021-T2', '2021-T3', '2021-T4', '2022-T1', '2022-T2', '2022-T3', '2022-T4', '2023-T1', '2023-T2', '2023-T3', '2023-T4', '2024-T1', '2024-T2', '2024-T3', '2024-T4', '2025-T1', '2025-T2', '2025-T3', '2025-T4'
+  ],
+  values: [2.99,6.56,0.41,1.58,3.52,1.14,3.59,-2.18,-4.59,-25.90,-16.25,-2.70,-1.86,27.35,12.86,4.78,8.75,4.55,3.66,-1.65,-0.19,3.59,2.86,3.79,-2.39,0.85,-1.40,-1.70,-1.67,-2.77,-0.68,-1.14]
+};
+            const activities = {
+                'Impuestos Netos': 'Derechos a las Importaciones, IVA, IT y Otros Impuestos Indirectos',
+                'Agropecuaria': 'Agricultura, Ganadería, Caza, Silvicultura y Pesca',
+                'Extracción': 'Extracción de Minas y Canteras',
+                'Industria': 'Industria Manufacturera',
+                'Serv. Básicos': 'Electricidad, Gas y Agua',
+                'Construcción': 'Construcción',
+                'Comercio': 'Comercio; Reparación de Vehículos Automotores y Motocicletas',
+                'Transporte': 'Transporte, Almacenamiento y Comunicaciones',
+                'Restaurantes y Hoteles': 'Actividades de Alojamiento y de Servicio de Comidas',
+                'Serv. Financieros': 'Servicios Financieros, Inmobiliarios y Empresariales',
+                'Adm. Pública': 'Servicios de la Adm. Pública, Educación y Salud',
+                'Otros Servicios': 'Actividades Artísticas, de Entretenimiento y Otros Servicios'
+            };
+            
+
+const contributionsActivity = {
+  'Impuestos Netos': [0.55,0.50,0.22,0.36,0.56,0.25,-0.08,-0.99,-1.17,-2.63,-1.58,-0.50,-0.54,2.37,1.06,0.52,1.11,0.54,-0.40,-0.65,0.34,-0.31,0.36,0.03,-0.94,-0.14,-0.34,-0.29,-0.70,-1.04,-1.08,-0.60],
+  'Agropecuaria': [0.23,0.62,-0.17,0.24,0.38,-0.19,0.78,-0.01,0.31,-0.03,0.40,0.79,0.23,1.41,-0.12,-0.15,0.26,0.31,0.32,-0.28,-0.12,0.46,1.04,0.97,-0.49,0.72,-0.92,-0.81,0.58,-0.04,1.03,0.82],
+  'Extracción': [0.78,0.26,-0.38,-0.86,-0.54,-0.77,0.06,0.54,-0.13,-3.91,-2.49,-0.50,0.10,5.54,2.76,1.06,1.27,0.13,-0.70,-0.97,-0.37,-0.41,-0.53,-1.21,-1.52,-0.84,-0.87,-0.66,-0.95,-1.21,-0.14,0.51],
+  'Industria': [0.72,0.37,-0.08,0.42,0.62,0.33,0.81,-0.65,-0.46,-3.72,-2.36,0.34,-0.05,4.40,1.68,-0.08,0.83,1.04,0.60,-0.05,0.13,0.38,0.76,0.72,-0.50,0.25,0.53,0.21,0.25,0.07,0.00,0.08],
+  'Serv. Básicos': [0.04,0.10,0.09,0.12,0.17,0.15,0.13,0.06,0.05,-0.29,-0.16,0.05,-0.01,0.42,0.27,0.13,0.16,0.09,0.07,0.05,0.04,0.06,0.08,0.13,0.13,0.06,0.00,-0.02,-0.03,-0.01,0.04,-0.02],
+  'Construcción': [-0.26,0.69,0.58,0.49,1.01,0.65,0.19,-1.17,-2.06,-4.44,-2.97,-0.69,-0.13,3.41,1.63,0.25,0.60,0.03,-0.29,-0.25,0.01,0.20,0.24,0.37,0.37,-0.04,-0.23,-0.20,-0.89,-0.43,-0.67,-1.09],
+  'Comercio': [0.11,0.50,-0.07,0.53,0.67,0.13,0.21,-0.62,-1.03,-3.02,-1.67,-0.13,0.37,3.27,1.27,0.35,0.60,0.64,0.63,0.21,0.29,0.33,-0.04,-0.23,-0.89,-0.29,-0.03,0.56,0.44,0.01,-0.24,-0.49],
+  'Transporte': [0.23,0.23,0.17,0.24,0.16,0.19,0.17,-0.53,-0.57,-2.61,-1.73,-0.23,-0.29,2.54,1.34,0.30,0.40,0.50,0.35,-0.02,0.11,0.01,0.03,0.42,0.09,0.14,-0.01,-0.23,-0.01,-0.21,0.08,-0.08],
+  'Restaurantes y Hoteles': [0.22,0.31,0.27,-0.12,0.38,0.17,-0.04,-0.28,-0.55,-1.70,-1.83,-1.04,-0.54,1.36,1.58,1.30,0.95,0.89,0.93,0.32,0.18,0.23,0.26,0.19,0.09,0.04,0.03,0.33,0.33,0.31,-0.03,0.11],
+  'Serv. Financieros': [1.35,0.78,0.12,-0.46,0.10,0.61,0.51,1.26,0.32,-1.61,-0.90,-1.25,-0.89,0.26,1.32,1.46,1.68,1.32,0.43,-0.73,-0.51,0.13,0.24,2.27,0.84,0.56,0.24,-1.37,-1.13,-0.64,-0.38,0.03],
+  'Adm. Pública': [-1.34,1.88,0.23,0.29,0.05,-0.10,0.16,0.45,0.01,-0.35,-0.07,-0.08,0.61,0.39,-0.08,0.76,1.37,-1.16,1.04,0.33,-0.81,2.32,0.34,0.07,0.54,0.36,0.12,0.48,0.12,0.38,0.77,-0.22],
+  'Otros Servicios': [0.35,0.32,-0.58,0.35,-0.04,-0.27,0.71,-0.23,0.71,-1.60,-0.89,0.54,-0.72,1.99,0.15,-1.13,-0.47,0.21,0.69,0.39,0.51,0.18,0.07,0.06,-0.10,0.03,0.08,0.30,0.34,0.03,-0.06,-0.20]
+};
+
+            Object.keys(activities).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${key} - ${activities[key].substring(0, 45)}...`;
+                activitySelector.appendChild(option);
+            });
+
+            let growthChart;
+            
+            function updateChart() {
+                if (!growthChart) return;
+                const [startIdx, endIdx] = slider.noUiSlider.get().map(v => parseInt(v));
+                const filteredLabels = fullData.labels.slice(startIdx, endIdx + 1);
+                growthChart.data.labels = filteredLabels;
+                growthChart.data.datasets.forEach(dataset => {
+                    const fullValues = dataset.activityKey === 'main' ? fullData.values : dataset.fullData;
+                    if (fullValues) dataset.data = fullValues.slice(startIdx, endIdx + 1);
+                });
+                growthChart.update();
+            }
+
+            growthChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        type: 'line', label: 'Crecimiento a similar periodo del PIB (%)', data: [], borderColor: '#b91c1c', backgroundColor: 'rgba(185, 28, 28, 0.1)', borderWidth: 3, fill: true, tension: 0.1, yAxisID: 'y', activityKey: 'main',
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { callback: function(v, i) { const l = this.getLabelForValue(v); return parseInt(l.substring(0, 4)) >= 2022 ? l + '(p)' : l; } } },
+                        y: { beginAtZero: false, title: { display: true, text: 'Tasa de Crecimiento / Contribución (%)' } }
+                    },
+                    plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } },
+                    interaction: { mode: 'index', intersect: false },
+                }
+            });
+            
+            noUiSlider.create(slider, {
+                start: [0, fullData.labels.length - 1], connect: true, step: 1, range: { 'min': 0, 'max': fullData.labels.length - 1 },
+                tooltips: { to: (value) => fullData.labels[Math.round(value)] }
+            });
+            slider.noUiSlider.on('update', updateChart);
+
+            contributionBtn.addEventListener('click', () => {
+                const selectedOptions = Array.from(activitySelector.selectedOptions);
+                growthChart.data.datasets = growthChart.data.datasets.filter(ds => ds.activityKey === 'main');
+                if (selectedOptions.length > 0) {
+                    const isSingle = selectedOptions.length === 1;
+                    const summed = new Array(fullData.labels.length).fill(0);
+                    let label = `Suma de Contribuciones (${selectedOptions.length} act.)`;
+                    selectedOptions.forEach(opt => {
+                        const key = opt.value;
+                        if(isSingle) label = `Contribución: ${key}`;
+                        contributionsActivity[key]?.forEach((val, idx) => { summed[idx] += parseFloat(val) || 0; });
+                    });
+                    growthChart.data.datasets.push({
+                        type: 'bar', label: label, data: [], fullData: summed, backgroundColor: 'rgba(220, 38, 38, 0.6)', borderColor: 'rgba(220, 38, 38, 1)', yAxisID: 'y', activityKey: 'sum'
+                    });
+                }
+                updateChart();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                activitySelector.selectedIndex = -1;
+                growthChart.data.datasets = growthChart.data.datasets.filter(ds => ds.activityKey === 'main');
+                updateChart();
+            });
+            
+            updateChart();
+        });
+    </script>
+</body>
+</html>
