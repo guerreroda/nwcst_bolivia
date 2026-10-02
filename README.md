@@ -30,7 +30,10 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 - Datos: [BOL_GTrends_Keywords_2026-09-18.xlsx](data/BOL_GTrends_Keywords_2026-09-18.xlsx)
 
 **Sesión 3 — viernes 2 de octubre, 15:30 – 17:00 · Datos: scraping y construcción de la base de datos**
-- *(próximamente)*
+- Presentación: [Scraping y datos públicos](https://guerreroda.github.io/nwcst_bolivia/slides/scraping.html)
+- [Actividad 4: Scraping, de la página al CSV](activity/act4_scraping.ipynb)
+- [Actividad 5: Construcción de la base de datos](activity/act5_build.ipynb)
+- Datos: [gdp.csv](data/gdp.csv) · [ntl.csv](data/ntl.csv) · [gtrends.csv](data/gtrends.csv) · [ine_ipc.csv](data/ine_ipc.csv) · [ine_importaciones_destino_economico.csv](data/ine_importaciones_destino_economico.csv)
 
 **Sesión 4 — jueves 8 de octubre, 10:00 – 11:30 · Fundamentos de R**
 - *(próximamente)*
