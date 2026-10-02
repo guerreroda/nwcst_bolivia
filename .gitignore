@@ -25,3 +25,10 @@ hfiles/
 ntl_tmp/
 output/
 **/shapes/
+
+# Written by act4 when it runs: each participant downloads their own
+raw/_fuentes.csv
+raw/fred_zinc.csv
+raw/ine_gdp.csv
+raw/ine_gdp_nominal.csv
+raw/bcb_rin.csv
