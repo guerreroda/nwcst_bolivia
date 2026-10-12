@@ -35,16 +35,18 @@ El programa combina cuatro semanas a distancia (videos asincrónicos y dos sesio
 - [Actividad 5: Construcción de la base de datos](activity/act5_build.ipynb)
 - Datos: [gdp.csv](data/gdp.csv) · [ntl.csv](data/ntl.csv) · [gtrends.csv](data/gtrends.csv) · [ine_ipc.csv](data/ine_ipc.csv) · [ine_importaciones_destino_economico.csv](data/ine_importaciones_destino_economico.csv)
 
-**Sesión 4 — jueves 8 de octubre, 10:00 – 11:30 · Fundamentos de R**
+**Sesión 4 — jueves 8 de octubre, 10:00 – 11:30 · Modelos de nowcasting: regularización**
+- [Actividad 6: Regularización (Ridge, LASSO, Elastic Net)](activity/act6_regularizacion.ipynb)
+- Datos: [data_BOL.csv](data/data_BOL.csv) · [meta_BOL.csv](data/meta_BOL.csv)
+
+**Sesión 5 — viernes 9 de octubre, 15:30 – 17:00 · Modelos de nowcasting: modelos basados en árboles**
+- [Actividad 7: Modelos basados en árboles (árbol de decisión, Random Forest, Gradient Boosting)](activity/act7_arboles.ipynb)
+- Datos: [data_BOL.csv](data/data_BOL.csv) · [meta_BOL.csv](data/meta_BOL.csv)
+
+**Sesión 6 — lunes 12 de octubre, 11:00 – 12:30 · Fundamentos de R**
 - *(próximamente)*
 
-**Sesión 5 — viernes 9 de octubre, 15:30 – 17:00 · Herramienta BID y modelos de series de tiempo**
-- *(próximamente)*
-
-**Sesión 6 — lunes 12 de octubre, 11:00 – 12:30 · Modelos de nowcasting: regularización**
-- *(próximamente)*
-
-**Sesión 7 — jueves 15 de octubre, 10:00 – 11:30 · Modelos de nowcasting: modelos basados en árboles**
+**Sesión 7 — jueves 15 de octubre, 10:00 – 11:30 · Herramienta BID y modelos de series de tiempo**
 - *(próximamente)*
 
 **Sesión 8 — viernes 16 de octubre, 15:30 – 17:00 · Modelos de nowcasting: red neuronal de corto y largo plazo (LSTM)**
