@@ -1,0 +1,398 @@
+---
+title: "Actividad 1: Primeros pasos con R (soluciones)"
+subtitle: "Entrenamiento en nowcasting con R. Banco Interamericano de Desarrollo / Banco Central de Bolivia"
+date: "`r Sys.Date()`"
+---
+
+---
+
+# Qué hace esta actividad
+
+Esta actividad usa R para **abrir, limpiar, transformar, unir y graficar** tres series de Bolivia:
+
+| archivo          | qué es                                                                                             | frecuencia |
+|------------------|----------------------------------------------------------------------------------------------------|------------|
+| `gdp.csv`        | PIB real de Bolivia (INE, medidas de volumen encadenadas, referencia 2017, millones de bolivianos) | trimestral |
+| `ntl.csv`        | Luces nocturnas (NASA Black Marble, VNP46A2): radiancia media sobre el territorio boliviano        | diaria     |
+| `eia_brent.xlsx` | Precio spot del petróleo Brent (EIA, dólares por barril)                                           | diaria     |
+
+Al terminar se han desarrollado estas habilidades:
+
+1. Abrir un archivo **CSV** y convertir su columna de fechas;
+2. Abrir un archivo **Excel (XLSX)**, incluso uno con filas de título;
+3. Usar el **pipe** (`%>%`) y los verbos de `dplyr` para filtrar, seleccionar, crear y resumir;
+4. **Limpieza** de datos (filtrar, seleccionar columnas, valores faltantes);
+5. **Remuestreo**: pasar de datos diarios a trimestrales;
+6. **Unión** (*join*) de varias series por fecha;
+8. **Gráficos** con `ggplot2`, en niveles y en tasas de crecimiento;
+9. **Exportar** a Excel. 
+
+### Cómo usar este archivo
+
+- Abra en VS Code la **carpeta del proyecto** (*File → Open Folder*), no sólo este archivo. Los datos están en la carpeta `data/`.
+- Cada chunk se ejecuta con **Run Chunk**. `Ctrl+Enter` ejecuta sólo la línea del cursor. **Run Above** corre todos los chunks anteriores.
+- Ejecute los chunks **en orden**, de arriba hacia abajo.
+- Donde vea `___` debe escribir el código que falta. El comentario `# SU CÓDIGO AQUÍ` da una pista.
+- `View(nombre_tabla)` abre una tabla en una pestaña de VS Code. `Alt+Z` activa el ajuste de línea si los párrafos se salen de la pantalla.
+
+---
+
+# 0 · Preparación
+
+Si este chunk falla, vuelva a `act0_env_check_R.Rmd`.
+
+```{r setup}
+library(tidyverse)   # dplyr, tidyr, ggplot2, readr...
+library(lubridate)   # fechas
+library(openxlsx)    # leer y escribir Excel
+
+list.files("../data")    # deben aparecer gdp.csv, ntl.csv y eia_brent.xlsx
+```
+
+---
+
+# 1 · R básico
+
+### Primer programa y operadores
+
+`print()` muestra en pantalla lo que se le pase. En la terminal, escribir sólo el nombre de un objeto también lo muestra.
+
+```{r basico-01}
+print("¡Hola, Bolivia!")
+
+2 + 5      # suma
+2 * 5      # multiplicación
+2^5        # potencia
+10 / 4     # división
+
+2 + 5 > 2 * 5    # operadores lógicos: devuelven TRUE o FALSE
+2^5 != 2 * 5     # != significa "distinto de"
+```
+
+**Salida esperada:**
+```
+[1] "¡Hola, Bolivia!"
+[1] 7
+[1] 10
+[1] 32
+[1] 2.5
+[1] FALSE
+[1] TRUE
+```
+
+### Variables y tipos
+
+Una variable se crea con `<-`. R deduce el tipo solo: `numeric`, `character` (texto entre comillas) o `logical` (`TRUE`/`FALSE`).
+
+```{r basico-01}
+pais <- "Bolivia"
+pib_t1 <- 78258.3     # PIB real 2025T1, millones de Bs.
+pib_t2 <- 86588.5     # 2025T2
+es_trimestral <- TRUE  
+
+class(pais)
+class(pib_t1)
+class(es_trimestral)
+
+crec <- pib_t2 / pib_t1 - 1
+paste0("El PIB de ", pais, " creció ", round(crec * 100, 2), "% entre el T1 y el T2 de 2025.")
+```
+
+**Salida esperada:**
+```
+[1] "character"
+[1] "numeric"
+[1] "El PIB de Bolivia creció 10.64% entre el T1 y el T2 de 2025."
+```
+
+### Vectores
+
+El vector agrupa varios valores del mismo tipo con `c()`. Las posiciones empiezan en **1** (no en 0 como en Python) y un índice negativo **quita** ese elemento. Las operaciones se aplican elemento por elemento, sin necesidad de bucles.
+
+```{r basico-02}
+pib_2025 <- c(78258.3, 86588.5, 84754.5, 79771.4)
+
+length(pib_2025)
+pib_2025[1]       # el primero
+pib_2025[-1]      # todos menos el primero
+pib_2025 / 1000   # en miles de millones
+```
+
+### Listas y matrices
+
+Una **lista** sí puede guardar elementos de distinto tipo, cada uno con su nombre (es el equivalente al diccionario de Python). Se accede con `$`. Una **matriz** es una tabla de dos dimensiones con un solo tipo de dato.
+
+```{r basico-11}
+dato <- list(pais = "Bolivia", anio = 2025, pib = 78258.3)
+dato$pib
+class(dato$pais)    # cada elemento conserva su tipo
+
+m <- matrix(1:6, nrow = 3, ncol = 2)
+m
+```
+
+
+### Condicionales y bucles
+
+En R los bloques van entre llaves `{ }`. `seq_along()` entrega las posiciones de un vector.
+
+```{r basico-03}
+crec_2020 <- c(-4.6, -25.9, -16.2, -2.7)     # variación interanual (%), 2020T1 a 2020T4
+
+for (i in seq_along(crec_2020)) {
+  if (crec_2020[i] < 0) {
+    print(paste0("T", i, ": contracción (", crec_2020[i], "%)"))
+  } else {
+    print(paste0("T", i, ": crecimiento (", crec_2020[i], "%)"))
+  }
+}
+```
+
+### Funciones
+
+```{r basico-04}
+crecimiento_anualizado <- function(crec_trim) {
+  # Convierte una tasa trimestral (%) en su equivalente anual (%)
+  ((1 + crec_trim / 100)^4 - 1) * 100
+}
+
+crecimiento_anualizado(0.875)
+```
+
+**Salida esperada:**
+```
+[1] 3.546...
+```
+
+### Data frame y pipe
+
+Un **data frame** es una tabla donde cada columna es un vector.
+
+El **pipe** `%>%` pasa lo de la izquierda a la función de la derecha (`df %>% filter(...)` es lo mismo que `filter(df, ...)`), y así los pasos se encadenan en orden. Estos son los verbos de `dplyr` más usados:
+
+| función       | qué hace                      |
+|---------------|-------------------------------|
+| `filter()`    | elige filas                   |
+| `select()`    | elige columnas                |
+| `mutate()`    | crea o modifica columnas      |
+| `arrange()`   | ordena las filas              |
+| `summarise()` | resume la tabla en una fila   |
+
+```{r basico-05}
+df <- data.frame(
+  trimestre = c("2025T1", "2025T2", "2025T3", "2025T4"),
+  pib       = pib_2025
+)
+str(df)
+df$pib            # una columna, como vector
+
+df %>%
+  filter(pib > 80000) %>%
+  mutate(pib_miles_mill = pib / 1000) %>%
+  arrange(desc(pib))
+
+df %>% summarise(promedio = mean(pib), desv_est = sd(pib))
+```
+
+---
+
+# 2 · Abrir archivos
+
+### CSV: el PIB
+
+Antes de hacer cualquier cosa, **mire los datos**. `str()` muestra que `date` llega como texto (`chr`): hay que convertirla a fecha con `ymd()` (año-mes-día; también existen `dmy()` y `mdy()`).
+
+```{r csv-01}
+df_gdp <- read.csv(file.path("../data", "gdp.csv"))
+str(df_gdp)
+
+df_gdp <- df_gdp %>%
+  mutate(date = ymd(date)) %>%
+  select(date, gdp)            # el archivo trae también gdp_construccion
+
+head(df_gdp, 5)
+```
+
+**Observe las fechas.** El trimestre 2017T1 aparece como `2017-03-01` y el 2017T2 como `2017-06-01`, es decir, cada trimestre está fechado el **primer día de su último mes**. Esta convención importa al unir series.
+
+### Excel: el precio del petróleo
+
+`eia_brent.xlsx` tiene el formato con que la EIA publica el Brent: una hoja de portada y otra de datos con **filas de título** encima. Si se lee sin opciones, R toma un título como encabezado:
+
+```{r excel-01}
+archivo_brent <- file.path("../data", "eia_brent.xlsx")
+getSheetNames(archivo_brent)
+
+read.xlsx(archivo_brent, sheet = "Data 1") %>% head(5)
+```
+
+El encabezado verdadero está en la **tercera** fila. Además, Excel guarda las fechas como número de días desde 1900, y `read.xlsx()` sólo las convierte con `detectDates = TRUE`.
+
+**COMPLETE (1)**: lea la hoja `Data 1` empezando en la fila 3 y convirtiendo las fechas.
+
+```{r excel-02}
+# SU CÓDIGO AQUÍ: read.xlsx(archivo, sheet = ..., startRow = ..., detectDates = TRUE)
+df_brent <- read.xlsx(archivo_brent, sheet = "Data 1", startRow = 3, detectDates = TRUE)
+
+df_brent <- df_brent %>% rename(date = 1, brent = 2)   # rename por posición: el nombre original es larguísimo
+str(df_brent)    # date debe decir "Date"
+```
+
+### CSV: luces nocturnas
+
+`ntl.csv` resume día por día las imágenes satelitales nocturnas sobre Bolivia. Se usan como indicador de actividad porque están disponibles casi en tiempo real, mucho antes que el PIB.
+
+```{r luces-01}
+df_ntl <- read.csv(file.path("../data", "ntl.csv")) %>%
+  mutate(date = ymd(date))
+
+summary(df_ntl)
+```
+
+| columna     | significado                                                            |
+|-------------|------------------------------------------------------------------------|
+| `ntl_mean`  | radiancia media de los píxeles de Bolivia ese día (**la que usaremos**) |
+| `ntl_sum`   | suma de la radiancia de todos los píxeles                              |
+| `ntl_n`     | número de píxeles usados                                               |
+| `ntl_tiles` | cuántas de las 4 "piezas" satelitales que cubren Bolivia había ese día |
+
+---
+
+# 3 · Limpieza
+
+Algunos días el satélite no cubrió las 4 piezas del mapa. `count()` muestra cuántos días hay de cada tipo; nos quedamos con los completos y con las dos columnas que usaremos.
+
+```{r limpieza-01}
+df_ntl %>% count(ntl_tiles)
+
+df_ntl <- df_ntl %>%
+  filter(ntl_tiles == 4) %>%
+  select(date, ntl_mean)
+
+# Dos revisiones que conviene hacer siempre
+colSums(is.na(df_ntl))           # faltantes por columna
+sum(duplicated(df_ntl$date))     # fechas duplicadas
+```
+
+Los datos diarios son **ruidosos** (nubes, luna, ángulo del satélite). `ggplot2` construye el gráfico por capas unidas con `+`:
+
+```{r limpieza-02}
+ggplot(df_ntl, aes(x = date, y = ntl_mean)) +
+  geom_line(color = "steelblue") +
+  labs(title = "Luces nocturnas, Bolivia (diario)", x = NULL, y = "radiancia media") +
+  theme_minimal()
+```
+
+---
+
+# 4 · Remuestreo: de diario a trimestral
+
+Para unir series de distinta frecuencia hay que llevarlas a la misma, y manda la más lenta (el PIB). El remuestreo tiene tres pasos:
+
+1. `floor_date(date, "quarter")` lleva cada fecha al primer día de su trimestre (1 ene, 1 abr...). Como el PIB está fechado el primer día del **último** mes (1 mar, 1 jun...), le sumamos dos meses con `%m+% months(2)`; sin eso las fechas no coincidirían y la unión saldría vacía;
+2. `group_by()` agrupa las filas por esa fecha;
+3. `summarise()` resume cada grupo.
+4. `ungroup()` quita la agrupación para que los pasos siguientes se apliquen a toda la tabla.
+
+```{r remuestreo-01}
+df_ntl_q <- df_ntl %>%
+  mutate(date = floor_date(date, "quarter") %m+% months(2)) %>%
+  group_by(date) %>%
+  summarise(ntl_mean = mean(ntl_mean, na.rm = TRUE)) %>%   # na.rm: ignorar faltantes
+  ungroup()
+
+tail(df_ntl_q, 4)
+```
+
+**COMPLETE (2)**: haga lo mismo con el Brent.
+
+```{r remuestreo-02}
+df_brent_q <- df_brent %>%
+  mutate(date = floor_date(date, "quarter") %m+% months(2)) %>%
+  group_by(date) %>%
+  summarise(brent = mean(brent, na.rm = TRUE)) %>%
+  ungroup()
+
+tail(df_brent_q, 4)
+```
+
+**Ojo.** Las luces llegan hasta el 1 de septiembre de 2026 y el Brent hasta mediados de septiembre, así que 2026T3 promedia sólo parte de sus días. Un nowcast aprovecha justamente esa información parcial del trimestre en curso.
+
+---
+
+# 5 · Combinar datos (*join*)
+
+`inner_join()` une por la llave `date` y conserva sólo las fechas presentes en todas las tablas:
+
+```{r union-01}
+df_merge <- df_gdp %>%
+  inner_join(df_ntl_q, by = "date") %>%
+  inner_join(df_brent_q, by = "date")
+
+tail(df_merge, 3)    # termina en 2025T4, el último dato del PIB
+write.xlsx(df_merge, "bolivia_trimestral.xlsx")
+```
+
+`left_join()` conserva **todas las filas de la tabla de la izquierda** y deja `NA` donde la derecha no tiene dato, así que el orden importa.
+
+**COMPLETE (3)**: una las luces (a la izquierda) con el PIB (a la derecha). ¿Dónde termina la tabla? ¿Qué pasa con el PIB en 2026?
+
+```{r union-02}
+# SU CÓDIGO AQUÍ
+ntl_izq <- df_ntl_q %>% left_join(df_gdp, by = "date")
+
+tail(ntl_izq, 4)    # el PIB de 2026 aún no existe: es lo que un nowcast quiere estimar
+```
+
+---
+
+# 6 · Gráficos y tasas de variación
+
+Las tres series están en unidades distintas. `pivot_longer()` pasa la tabla a formato **largo** (una fila por fecha y serie), que es el que prefiere `ggplot2`, y `facet_wrap()` dibuja un panel por serie con su propia escala:
+
+```{r graficos-01}
+df_merge %>%
+  pivot_longer(-date, names_to = "serie", values_to = "valor") %>%
+  ggplot(aes(x = date, y = valor)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  facet_wrap(~ serie, ncol = 1, scales = "free_y") +
+  labs(title = "PIB, luces nocturnas y Brent (trimestral)", x = NULL, y = NULL) +
+  theme_minimal()
+```
+
+Para comparar series de distinta escala usamos **tasas de variación**. `lag(x, k)` devuelve el valor de `k` periodos atrás. Con `k = 4` se compara con el mismo trimestre del año anterior (**variación interanual**), lo que elimina buena parte de la estacionalidad del PIB boliviano.
+
+**COMPLETE (4)**: calcule la variación interanual en % del Brent, igual que las otras dos.
+
+```{r graficos-02}
+df_yoy <- df_merge %>%
+  arrange(date) %>%                                    # lag() depende del orden
+  mutate(gdp      = (gdp / lag(gdp, 4) - 1) * 100,
+         ntl_mean = (ntl_mean / lag(ntl_mean, 4) - 1) * 100,
+         brent    = (brent / lag(brent, 4) - 1) * 100)
+```
+
+
+**COMPLETE (5)**: haga un diagrama de dispersión de las luces (eje x) contra el PIB (eje y).
+
+```{r graficos-04}
+ggplot(df_yoy, aes(x = ntl_mean, y = gdp)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm") +
+  labs(title = "Luces nocturnas y PIB (variación interanual, %)",
+       x = "Luces nocturnas", y = "PIB real") +
+  theme_minimal()
+```
+
+Por eso un nowcast no se apoya en una sola serie: combina muchas y evalúa fuera de muestra, como veremos en las sesiones 5 y 6.
+
+---
+
+# 7 · Exportar
+
+`write.xlsx()` guarda una tabla como archivo Excel. Recibe la tabla y la ruta donde se guarda el archivo:
+
+```{r exportar-01}
+write.xlsx(df_merge, file.path("../data", "bolivia_trimestral.xlsx"))
+```
+---
